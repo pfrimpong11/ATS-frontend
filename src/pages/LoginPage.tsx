@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import qs from "qs";
 import { useNavigate } from "react-router-dom";
 import { User, Lock, Eye, EyeOff } from "lucide-react";
 import logo from '../assets/images/logo.png';
@@ -11,6 +12,7 @@ const LoginPage: React.FC = () => {
   const [formData, setFormData] = useState({
     username: "",
     password: "",
+    grant_type: "password",
   });
 
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -27,9 +29,46 @@ const LoginPage: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    navigate("/ResumeJobUpload")
+  
+    console.log("Form Data before sending:", formData);
+  
+    try {
+      if (!formData.username || !formData.password) {
+        setErrorMessage("Username and password are required.");
+        return;
+      }
+  
+      const response = await axios.post(
+        `${import.meta.env.VITE_BACKEND_API}/token`,
+        qs.stringify(formData), // Use qs to stringify the data
+        {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+        }
+      );
+  
+      const token = response.data.access_token;
+      sessionStorage.setItem("token", token);
+  
+      console.log("Login successful:", response.data.msg);
+      navigate("/ResumeJobUpload");
+    } catch (error: any) {
+      console.error("Error response:", error.response);
+  
+      if (error.response && error.response.data && error.response.data.detail) {
+        const errorMessages = error.response.data.detail.map((err: any) => {
+          return `${err.loc[1]}: ${err.msg}`;
+        });
+        setErrorMessage(errorMessages.join(", "));
+      } else {
+        setErrorMessage("Login failed. Please try again.");
+      }
+    }
   };
+    
+  // navigate("/ResumeJobUpload")
+
 
   const pageStyle: React.CSSProperties = {
     display: "flex",

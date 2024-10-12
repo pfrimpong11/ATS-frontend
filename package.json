@@ -12,12 +12,14 @@
   "dependencies": {
     "axios": "^1.7.7",
     "lucide-react": "^0.451.0",
+    "qs": "^6.13.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.26.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.11.1",
+    "@types/qs": "^6.9.16",
     "@types/react": "^18.3.10",
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.2",

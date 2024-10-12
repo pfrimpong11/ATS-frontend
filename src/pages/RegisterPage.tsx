@@ -62,9 +62,32 @@ const RegisterPage: React.FC = () => {
     if (!agreeToTerms) {
         setErrorMessage("You must agree to the Terms and Conditions.");
         return;
-    }  
-  
-    navigate("/LoginPage");
+    }
+
+    try {
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND_API}/register`, {
+        username: formData.username,
+        full_name: formData.name,
+        email: formData.email,
+        password: formData.password,
+      });
+      console.log(response);
+      
+      const token = response.data.access_token;  // Correct token extraction
+      console.log(response.data.access_token);
+    
+      sessionStorage.setItem("token", token);
+    
+      console.log("Registration successful:", response.data.msg);
+      navigate("/LoginPage");
+    } catch (error: any) {
+      if (error.response && error.response.data && error.response.data.msg) {
+        setErrorMessage(error.response.data.msg);
+      } else {
+        setErrorMessage("Registration failed. Please try again.");
+      }
+      console.error("There was an error registering the user:", error);
+    }
   };
 
   const pageStyle: React.CSSProperties = {

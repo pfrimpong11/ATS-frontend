@@ -39,7 +39,7 @@ const LoginPage: React.FC = () => {
       }
   
       const response = await axios.post(
-        `${import.meta.env.VITE_BACKEND_API}/token`,
+        `https://jobmatch-fastapi.onrender.com/token`,
         qs.stringify(formData), // Use qs to stringify the data
         {
           headers: {

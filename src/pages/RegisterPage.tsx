@@ -65,7 +65,7 @@ const RegisterPage: React.FC = () => {
     }
 
     try {
-      const response = await axios.post(`${import.meta.env.VITE_BACKEND_API}/register`, {
+      const response = await axios.post(`https://jobmatch-fastapi.onrender.com/register`, {
         username: formData.username,
         full_name: formData.name,
         email: formData.email,

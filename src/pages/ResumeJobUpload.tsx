@@ -1,75 +1,134 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Upload, FileText, AlertCircle, CheckCircle, X } from 'lucide-react'
+import { Upload, FileText, AlertCircle, CheckCircle, X } from 'lucide-react';
 import Background from '../assets/images/resume-upload.png';
+import axios from 'axios';
+import qs from 'qs';
 
 const ResumeJobUpload: React.FC = () => {
-    const navigate = useNavigate();
-  const [resume, setResume] = useState<File | null>(null)
-  const [jobDescriptionFile, setJobDescriptionFile] = useState<File | null>(null)
-  const [jobDescriptionText, setJobDescriptionText] = useState<string>('')
-  const [errorMessage, setErrorMessage] = useState<string>('')
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
-  const [isSuccess, setIsSuccess] = useState<boolean>(false)
+  const navigate = useNavigate();
+  const [resume, setResume] = useState<File | null>(null);
+  const [jobDescriptionFile, setJobDescriptionFile] = useState<File | null>(null);
+  const [jobDescriptionText, setJobDescriptionText] = useState<string>('');
+  const [errorMessage, setErrorMessage] = useState<string>('');
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [isSuccess, setIsSuccess] = useState<boolean>(false);
 
   const handleResumeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
-      setResume(event.target.files[0])
+      setResume(event.target.files[0]);
     }
-  }
+  };
 
   const handleJobDescriptionFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
-      setJobDescriptionFile(event.target.files[0])
-      setJobDescriptionText('')
+      setJobDescriptionFile(event.target.files[0]);
+      setJobDescriptionText('');  // Reset text if file is uploaded
     }
-  }
+  };
 
   const handleJobDescriptionTextChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setJobDescriptionText(event.target.value)
-    setJobDescriptionFile(null)
-  }
+    setJobDescriptionText(event.target.value);  // Update job description text
+    setJobDescriptionFile(null);  // Clear file if text is entered
+  };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
+    event.preventDefault();
     
     if (!resume || (!jobDescriptionFile && !jobDescriptionText)) {
-      setErrorMessage('Please upload a resume and provide a job description (either as a file or text).')
-      return
+      setErrorMessage('Please upload a resume and provide a job description (either as a file or text).');
+      return;
     }
-
-    setIsSubmitting(true)
-    setErrorMessage('')
-
-    const formData = new FormData()
-    formData.append('resume', resume)
-    
-    if (jobDescriptionFile) {
-      formData.append('jobDescriptionFile', jobDescriptionFile)
-    } else {
-      formData.append('jobDescriptionText', jobDescriptionText)
-    }
-
+  
+    setIsSubmitting(true);
+    setErrorMessage('');
+  
     try {
-      // Simulating API call
-      await new Promise(resolve => setTimeout(resolve, 2000))
-      console.log('Submitting:', resume, jobDescriptionFile || jobDescriptionText)
-      setIsSuccess(true)
-      navigate("/JobMatchResult");
+      // Step 1: Upload Resume to extract the text
+      const uploadFormData = new FormData();
+      uploadFormData.append('resume_file', resume);
+  
+      const uploadResponse = await axios.post(
+        `${import.meta.env.VITE_BACKEND_API}/upload_resume`,
+        uploadFormData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+          },
+        }
+      );
+  
+      // console.log('Resume upload successful', uploadResponse);
+      const resumeText = uploadResponse.data.resume_text;  // Resume text received from backend
+  
+      let jobDescriptionContent = '';
+  
+      // Step 2: Handle Job Description File (if uploaded) to extract text
+      if (jobDescriptionFile) {
+        const jobDescriptionFormData = new FormData();
+        jobDescriptionFormData.append('resume_file', jobDescriptionFile);  // Use same endpoint for job description
+  
+        const jobDescUploadResponse = await axios.post(
+          `${import.meta.env.VITE_BACKEND_API}/upload_resume`,  // endpoint to extract text from job description
+          jobDescriptionFormData,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+            },
+          }
+        );
+        
+        // console.log('Job description upload successful', jobDescUploadResponse);
+        jobDescriptionContent = jobDescUploadResponse.data.resume_text;  // Extracted text from the job description
+      } else {
+        jobDescriptionContent = jobDescriptionText;  // Use manual input text
+      }
+  
+      // Step 3: Match Resume and job description
+      const matchPayload = {
+        resume_text: resumeText,
+        job_description: jobDescriptionContent,
+      };
+      // console.log(matchPayload);
+  
+      const matchResponse = await axios.post(
+        `${import.meta.env.VITE_BACKEND_API}/match_resume`,
+        qs.stringify(matchPayload),
+        {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+          },
+        }
+      );
+  
+      // console.log('Match result:', matchResponse.data);
+  
+      setIsSuccess(true);
+      navigate("/JobMatchResult", { state: { jobMatchData: matchResponse.data } });
     } catch (error) {
-      setErrorMessage('An error occurred while submitting. Please try again.')
+      console.error('Error submitting form:', error);
+      setErrorMessage('An error occurred while submitting. Please try again.');
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
-  }
-
+  };
+  
   const resetForm = () => {
-    setResume(null)
-    setJobDescriptionFile(null)
-    setJobDescriptionText('')
-    setErrorMessage('')
-    setIsSuccess(false)
-  }
+    setResume(null);
+    setJobDescriptionFile(null);
+    setJobDescriptionText('');
+    setErrorMessage('');
+    setIsSuccess(false);
+  };
+
+  const handleLogout = () => {
+    sessionStorage.removeItem("token");
+    navigate("/");
+  };
+
 
   const styles: { [key: string]: React.CSSProperties } = {
     pageContainer: {
@@ -119,12 +178,12 @@ const ResumeJobUpload: React.FC = () => {
       padding: '2rem',
     },
     imageTitle: {
-      fontSize: '2.5rem',
+      fontSize: '2rem',
       fontWeight: 'bold',
       marginBottom: '1rem',
     },
     imageDescription: {
-      fontSize: '1.25rem',
+      fontSize: '1rem',
       maxWidth: '600px',
     },
     formContainer: {
@@ -220,6 +279,20 @@ const ResumeJobUpload: React.FC = () => {
     removeFile: {
       cursor: 'pointer',
       color: '#dc2626',
+    },
+    logoutButton: {
+      position: 'absolute',
+      top: '0',
+      right: '0',
+      padding: '0.5rem 1rem',
+      backgroundColor: '#ef4444',
+      color: 'white',
+      border: 'none',
+      borderRadius: '6px',
+      fontSize: '0.875rem',
+      fontWeight: 'bold',
+      cursor: 'pointer',
+      transition: 'background-color 0.3s ease',
     },
   }
 
@@ -331,6 +404,9 @@ const ResumeJobUpload: React.FC = () => {
           />
           <div style={styles.overlay}></div>
           <div style={styles.imageText}>
+            <button onClick={handleLogout} style={styles.logoutButton}>
+              Logout
+            </button>
             <h1 style={styles.imageTitle}>Unlock Your Career Potential</h1>
             <p style={styles.imageDescription}>
               Let our AI-powered resume analyzer match you with your dream job. Upload your resume and take the first step towards your ideal career.

@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React from 'react'
+import { useLocation } from 'react-router-dom'
 import { CheckCircle, AlertCircle, User, Briefcase, Lightbulb, TrendingUp } from 'lucide-react'
 
 interface JobMatchResponse {
@@ -9,22 +10,10 @@ interface JobMatchResponse {
   AlternativeJob: string
 }
 
-const dummyData: JobMatchResponse = {
-  JDMatch: "75%",
-  MissingKeywords: ["Big data technologies (e.g., Hadoop, Spark)", "Familiarity with deep learning frameworks (e.g., TensorFlow, PyTorch)"],
-  ProfileSummary: "John Doe is a highly skilled and motivated Computer Engineering student with an interest in Data Science, Machine Learning, Natural Language Processing, Computer Vision, and AI/ML. He has a solid knowledge of programming in Python and JavaScript. Prince has also worked on projects involving Resume Screening, Automated Flashcard Generation, and an Automated Extraction System for Patient Information Leaflets.",
-  Advice: [
-    "To improve the resume, it is recommended that Prince quantifies his work experience in the IT industry by including specific metrics and results. For example, instead of stating \"Provided technical support for live events and assisted in maintaining security cameras,\" Prince could quantify the number of events supported and the number of cameras maintained.",
-    "Prince should also highlight his problem-solving and decision-making skills in his resume. This could be achieved by providing specific examples of projects where he was able to identify problems, develop solutions, and make informed decisions.",
-    "Prince should include a section in his resume dedicated to coursework. This section would allow him to highlight his academic achievements, particularly in data science-related courses.",
-    "Prince should also consider obtaining a few more industry certifications, such as the AWS Certified Solutions Architect or the Google Cloud Certified Professional Data Engineer. This will further strengthen his resume and make him more competitive in the job market.",
-    "Prince should include a GitHub link where potential employers can view his contributions to the ATS tool."
-  ],
-  AlternativeJob: "Machine Learning Engineer"
-}
 
 const JobMatchResult: React.FC = () => {
-  const [jobMatchData] = useState<JobMatchResponse | null>(dummyData)
+  const location = useLocation()
+  const jobMatchData = location.state?.jobMatchData as JobMatchResponse | null
 
   const styles: { [key: string]: React.CSSProperties } = {
     container: {

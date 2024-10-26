@@ -65,20 +65,20 @@ const RegisterPage: React.FC = () => {
     }
 
     try {
-      const response = await axios.post(`https://jobmatch-fastapi.onrender.com/register`, {
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND_API}/register`, {
         username: formData.username,
         full_name: formData.name,
         email: formData.email,
         password: formData.password,
       });
-      console.log(response);
+      // console.log(response);
       
       const token = response.data.access_token;  // Correct token extraction
-      console.log(response.data.access_token);
+      // console.log(response.data.access_token);
     
       sessionStorage.setItem("token", token);
     
-      console.log("Registration successful:", response.data.msg);
+      // console.log("Registration successful:", response.data.msg);
       navigate("/LoginPage");
     } catch (error: any) {
       if (error.response && error.response.data && error.response.data.msg) {
@@ -197,7 +197,7 @@ const RegisterPage: React.FC = () => {
         <div style={logoStyle}>
           <img src={logo} alt="jobmatch Logo" width="100" height="100" />
         </div>
-        <h1 style={titleStyle}>Sign Up for JobMatch</h1>
+        <h1 style={titleStyle}>Sign Up</h1>
         <form onSubmit={handleSubmit} style={formStyle}>
           <div style={inputContainerStyle}>
             <label htmlFor="username" style={labelStyle}>

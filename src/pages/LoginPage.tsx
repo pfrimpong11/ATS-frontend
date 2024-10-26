@@ -30,7 +30,7 @@ const LoginPage: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
   
-    console.log("Form Data before sending:", formData);
+    // console.log("Form Data before sending:", formData);
   
     try {
       if (!formData.username || !formData.password) {
@@ -39,7 +39,7 @@ const LoginPage: React.FC = () => {
       }
   
       const response = await axios.post(
-        `https://jobmatch-fastapi.onrender.com/token`,
+        `${import.meta.env.VITE_BACKEND_API}/token`,
         qs.stringify(formData), // Use qs to stringify the data
         {
           headers: {
@@ -49,9 +49,10 @@ const LoginPage: React.FC = () => {
       );
   
       const token = response.data.access_token;
+      // console.log(response.data.access_token);
       sessionStorage.setItem("token", token);
   
-      console.log("Login successful:", response.data.msg);
+      // console.log("Login successful:", response.data.msg);
       navigate("/ResumeJobUpload");
     } catch (error: any) {
       console.error("Error response:", error.response);

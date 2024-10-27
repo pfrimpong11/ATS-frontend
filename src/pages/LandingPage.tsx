@@ -100,7 +100,7 @@ const LandingPage: React.FC = () => {
     <div style={{ minHeight: '100vh', background: 'linear-gradient(to bottom, #eff6ff, white)', color: '#1f2937' }}>
       <header style={styles.container}>
         <nav style={styles.header}>
-          <h1 style={styles.logo}>JobMatch</h1>
+          <h1 style={styles.logo}>Jobfit Ai</h1>
           <button onClick={handleButton} style={styles.button}>Get Started</button>
         </nav>
       </header>

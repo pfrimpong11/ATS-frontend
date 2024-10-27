@@ -195,7 +195,7 @@ const RegisterPage: React.FC = () => {
     <div style={pageStyle} className="register-container">
       <div style={formContainerStyle}>
         <div style={logoStyle}>
-          <img src={logo} alt="jobmatch Logo" width="100" height="100" />
+          <img src={logo} alt="Jobfit Ai Logo" width="100" height="100" />
         </div>
         <h1 style={titleStyle}>Sign Up</h1>
         <form onSubmit={handleSubmit} style={formStyle}>

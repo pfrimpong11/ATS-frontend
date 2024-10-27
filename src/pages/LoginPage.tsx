@@ -170,9 +170,9 @@ const LoginPage: React.FC = () => {
     <div style={pageStyle} className="login-container">
       <div style={formContainerStyle}>
         <div style={logoStyle}>
-          <img src={logo} alt="jobmatch Logo" width="100" height="100" />
+          <img src={logo} alt="Jobfit Ai Logo" width="100" height="100" />
         </div>
-        <h1 style={titleStyle}>Login to JobMatch</h1>
+        <h1 style={titleStyle}>Login</h1>
         <form onSubmit={handleSubmit} style={formStyle}>
           <div style={inputContainerStyle}>
             <label htmlFor="username" style={labelStyle}>
@@ -234,11 +234,11 @@ const LoginPage: React.FC = () => {
             Login
           </button>
         </form>
-        <div style={{ textAlign: "center", marginTop: "20px" }}>
+        {/* <div style={{ textAlign: "center", marginTop: "20px" }}>
           <a href="/ForgotPasswordPage" style={linkStyle} className="login-link">
             Forgot Password?
           </a>
-        </div>
+        </div> */}
         <p style={{ textAlign: "center", marginTop: "20px" }}>
           Don't have an account?{" "}
           <a href="/RegisterPage" style={linkStyle} className="login-link">

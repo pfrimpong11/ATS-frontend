@@ -70,13 +70,13 @@ const TermsAndConditions: React.FC = () => {
   return (
     <div style={styles.container}>
       <header style={styles.header}>
-        <h1 style={styles.title}>JobMatch Terms and Conditions</h1>
+        <h1 style={styles.title}>Jobfit Ai Terms and Conditions</h1>
         <p style={styles.lastUpdated}><strong>Last updated:</strong> October 9, 2024</p>
       </header>
 
       <div style={styles.section}>
         <p style={styles.paragraph}>
-          Welcome to <strong style={styles.strong}>JobMatch</strong>! These terms and conditions outline the rules and regulations for the use of JobMatch's services, provided by <strong style={styles.strong}>JobMatch Inc.</strong> ("we", "us", "our").
+          Welcome to <strong style={styles.strong}>Jobfit Ai</strong>! These terms and conditions outline the rules and regulations for the use of Jobfit Ai's services, provided by <strong style={styles.strong}>Jobfit Ai.</strong> ("we", "us", "our").
         </p>
         <p style={styles.paragraph}>
           By registering or using our services, you agree to these terms and conditions. Please read them carefully.
@@ -89,7 +89,7 @@ const TermsAndConditions: React.FC = () => {
           1. Acceptance of Terms
         </h2>
         <p style={styles.paragraph}>
-          By accessing or using the JobMatch app, you agree to be bound by these Terms and Conditions, including our Privacy Policy. If you do not agree with any part of the Terms, you may not use our services.
+          By accessing or using the Jobfit Ai app, you agree to be bound by these Terms and Conditions, including our Privacy Policy. If you do not agree with any part of the Terms, you may not use our services.
         </p>
       </div>
 
@@ -99,7 +99,7 @@ const TermsAndConditions: React.FC = () => {
           2. Description of Services
         </h2>
         <p style={styles.paragraph}>
-          JobMatch provides an online platform where users can upload their resumes and job descriptions to receive automated analysis, job suggestions, and resume improvement recommendations. The services we provide are intended to enhance the job application process but do not guarantee employment or specific outcomes.
+          Jobfit Ai provides an online platform where users can upload their resumes and job descriptions to receive automated analysis, job suggestions, and resume improvement recommendations. The services we provide are intended to enhance the job application process but do not guarantee employment or specific outcomes.
         </p>
       </div>
 
@@ -133,7 +133,7 @@ const TermsAndConditions: React.FC = () => {
           4. Privacy and Data Protection
         </h2>
         <p style={styles.paragraph}>
-          By using JobMatch, you consent to the collection, use, and sharing of your data as outlined in our <strong style={styles.strong}>Privacy Policy</strong>. We take your privacy seriously and use your data to provide you with the best possible experience while ensuring it is handled securely.
+          By using Jobfit Ai, you consent to the collection, use, and sharing of your data as outlined in our <strong style={styles.strong}>Privacy Policy</strong>. We take your privacy seriously and use your data to provide you with the best possible experience while ensuring it is handled securely.
         </p>
       </div>
 
@@ -143,7 +143,7 @@ const TermsAndConditions: React.FC = () => {
           5. Intellectual Property
         </h2>
         <p style={styles.paragraph}>
-          All content, design, and intellectual property associated with JobMatch, including logos, branding, and software, are owned by us. You may not copy, distribute, modify, or use our intellectual property without prior written permission.
+          All content, design, and intellectual property associated with Jobfit Ai, including logos, branding, and software, are owned by us. You may not copy, distribute, modify, or use our intellectual property without prior written permission.
         </p>
       </div>
 
@@ -153,7 +153,7 @@ const TermsAndConditions: React.FC = () => {
           6. User Accounts
         </h2>
         <p style={styles.paragraph}>
-          To access certain features of JobMatch, you must register an account. You are responsible for keeping your account details secure. Do not share your login credentials with others. We reserve the right to suspend or terminate accounts that violate these terms.
+          To access certain features of Jobfit Ai, you must register an account. You are responsible for keeping your account details secure. Do not share your login credentials with others. We reserve the right to suspend or terminate accounts that violate these terms.
         </p>
       </div>
 
@@ -172,7 +172,7 @@ const TermsAndConditions: React.FC = () => {
           </li>
           <li style={styles.listItem}>
             <AlertTriangle style={styles.listItemIcon} size={16} color="#ef4444" />
-            Use JobMatch to send spam, phishing, or other unsolicited messages.
+            Use Jobfit Ai to send spam, phishing, or other unsolicited messages.
           </li>
           <li style={styles.listItem}>
             <AlertTriangle style={styles.listItemIcon} size={16} color="#ef4444" />
@@ -187,7 +187,7 @@ const TermsAndConditions: React.FC = () => {
           8. Termination of Use
         </h2>
         <p style={styles.paragraph}>
-          We may suspend or terminate your access to JobMatch at any time if you violate these terms or engage in behavior that harms our services or other users. You may also terminate your account at any time by contacting us.
+          We may suspend or terminate your access to Jobfit Ai at any time if you violate these terms or engage in behavior that harms our services or other users. You may also terminate your account at any time by contacting us.
         </p>
       </div>
 
@@ -197,7 +197,7 @@ const TermsAndConditions: React.FC = () => {
           9. Limitation of Liability
         </h2>
         <p style={styles.paragraph}>
-          While we strive to provide accurate and reliable services, JobMatch does not guarantee that the services will be error-free or uninterrupted. We are not responsible for any damages, loss of data, or loss of opportunity arising from the use or inability to use our services.
+          While we strive to provide accurate and reliable services, Jobfit Ai does not guarantee that the services will be error-free or uninterrupted. We are not responsible for any damages, loss of data, or loss of opportunity arising from the use or inability to use our services.
         </p>
       </div>
 

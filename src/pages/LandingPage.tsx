@@ -109,7 +109,7 @@ const LandingPage: React.FC = () => {
         <section style={styles.heroSection}>
           <h2 style={styles.heroTitle}>Your Ultimate ATS Resume Evaluator</h2>
           <p style={styles.heroDescription}>
-            Unlock your potential and stand out in today's competitive job market with JobMatch!
+            Unlock your potential and stand out in today's competitive job market with Jobfit Ai!
           </p>
           <button onClick={handleButton} style={{ ...styles.button, fontSize: '1.125rem', padding: '0.75rem 2rem' }}>Start Now</button>
         </section>
@@ -137,9 +137,9 @@ const LandingPage: React.FC = () => {
             </ul>
           </div>
           <div style={styles.card}>
-            <h3 style={styles.sectionTitle}>Why JobMatch?</h3>
+            <h3 style={styles.sectionTitle}>Why Jobfit Ai?</h3>
             <p style={{ marginBottom: '1rem' }}>
-              JobMatch revolutionizes the way you prepare your resume. We know that job hunting can be stressful, and
+              Jobfit Ai revolutionizes the way you prepare your resume. We know that job hunting can be stressful, and
               Applicant Tracking Systems (ATS) can often be a hurdle. That's why we've built a smart tool to ensure your
               resume isn't just a good fit for you, but also for the job you're applying for.
             </p>
@@ -162,7 +162,7 @@ const LandingPage: React.FC = () => {
       </main>
 
       <footer style={styles.footer}>
-        <div style={styles.container}>&copy; {currentYear} JobMatch. All rights reserved.</div>
+        <div style={styles.container}>&copy; {currentYear} Jobfit Ai. All rights reserved.</div>
       </footer>
     </div>
   )

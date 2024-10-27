@@ -1,5 +1,5 @@
 import React from 'react'
-import { Scroll, Shield, User, FileText, Lock, Briefcase, AlertTriangle, Power, Scale, RefreshCw, Mail } from 'lucide-react'
+import { Scroll, Shield, User, Lock, Briefcase, AlertTriangle, Power, Scale, RefreshCw, Mail } from 'lucide-react'
 
 const TermsAndConditions: React.FC = () => {
   const styles: { [key: string]: React.CSSProperties } = {

@@ -183,6 +183,7 @@ const RegisterPage: React.FC = () => {
     textDecoration: "none",
     fontWeight: "bold",
     transition: "color 0.3s ease",
+    cursor: 'pointer',
   };
 
   const checkboxStyle: React.CSSProperties = {
@@ -310,7 +311,7 @@ const RegisterPage: React.FC = () => {
               onChange={handleChange}
             />
             <label htmlFor="agreeToTerms">
-              I agree to the <a href="/TermsAndConditions" style={linkStyle}>Terms and Conditions</a>
+              I agree to the <a onClick={() => {navigate("/TermsAndConditions")} } style={linkStyle}>Terms and Conditions</a>
             </label>
           </div>
           {errorMessage && <p style={errorStyle}>{errorMessage}</p>}
@@ -331,7 +332,7 @@ const RegisterPage: React.FC = () => {
           </button>
         </form>
         <p style={{ textAlign: "center", marginTop: "20px" }}>
-          Already have an account? <a href="/LoginPage" style={linkStyle} className="register-link">Sign in</a>
+          Already have an account? <a onClick={() => {navigate("/LoginPage")}} style={linkStyle} className="register-link">Sign in</a>
         </p>
       </div>
     </div>

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import qs from "qs";
 import { useNavigate } from "react-router-dom";
-import { User, Lock, Eye, EyeOff } from "lucide-react";
+import { User, Lock, Eye, EyeOff, Loader } from "lucide-react";
 import logo from '../assets/images/logo.png';
 import backgroundImage from '../assets/images/background.png';
 
@@ -17,6 +17,7 @@ const LoginPage: React.FC = () => {
 
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -29,18 +30,18 @@ const LoginPage: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-  
-    // console.log("Form Data before sending:", formData);
+    setIsLoading(true);
   
     try {
       if (!formData.username || !formData.password) {
         setErrorMessage("Username and password are required.");
+        setIsLoading(false);
         return;
       }
   
       const response = await axios.post(
         `${import.meta.env.VITE_BACKEND_API}/token`,
-        qs.stringify(formData), // Use qs to stringify the data
+        qs.stringify(formData),
         {
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
@@ -49,10 +50,8 @@ const LoginPage: React.FC = () => {
       );
   
       const token = response.data.access_token;
-      // console.log(response.data.access_token);
       sessionStorage.setItem("token", token);
   
-      // console.log("Login successful:", response.data.msg);
       navigate("/ResumeJobUpload");
     } catch (error: any) {
       console.error("Error response:", error.response);
@@ -65,11 +64,10 @@ const LoginPage: React.FC = () => {
       } else {
         setErrorMessage("Login failed. Please try again.");
       }
+    } finally {
+      setIsLoading(false);
     }
   };
-    
-  // navigate("/ResumeJobUpload")
-
 
   const pageStyle: React.CSSProperties = {
     display: "flex",
@@ -150,6 +148,9 @@ const LoginPage: React.FC = () => {
     borderRadius: "8px",
     cursor: "pointer",
     transition: "background-color 0.3s ease, transform 0.1s ease",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
   };
 
   const errorStyle: React.CSSProperties = {
@@ -223,23 +224,26 @@ const LoginPage: React.FC = () => {
             type="submit"
             style={buttonStyle}
             className="login-button"
+            disabled={isLoading}
             onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = "#0845c9";
-              e.currentTarget.style.transform = "translateY(-2px)";
+              if (!isLoading) {
+                e.currentTarget.style.backgroundColor = "#0845c9";
+                e.currentTarget.style.transform = "translateY(-2px)";
+              }
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = "#2563eb";
-              e.currentTarget.style.transform = "translateY(0)";
+              if (!isLoading) {
+                e.currentTarget.style.backgroundColor = "#2563eb";
+                e.currentTarget.style.transform = "translateY(0)";
+              }
             }}
           >
-            Login
+            {isLoading ? (
+              <Loader className="animate-spin mr-2" size={20} />
+            ) : null}
+            {isLoading ? "Logging in..." : "Login"}
           </button>
         </form>
-        {/* <div style={{ textAlign: "center", marginTop: "20px" }}>
-          <a onClick={() => {navigate("/ForgotPasswordPage")}} style={linkStyle} className="login-link">
-            Forgot Password?
-          </a>
-        </div> */}
         <p style={{ textAlign: "center", marginTop: "20px" }}>
           Don't have an account?{" "}
           <a onClick={() => {navigate("/RegisterPage")}} style={linkStyle} className="login-link">

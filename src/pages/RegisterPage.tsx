@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { User, Mail, Lock, Eye, EyeOff } from "lucide-react";
+import { User, Mail, Lock, Eye, EyeOff, Loader } from "lucide-react";
 import logo from '../assets/images/logo.png';
 import backgroundImage from '../assets/images/background.png';
 
@@ -20,12 +20,13 @@ const RegisterPage: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
+    const { name, value, type, checked } = e.target;
     setFormData((prevState) => ({
       ...prevState,
-      [name]: value,
+      [name]: type === 'checkbox' ? checked : value,
     }));
     setErrorMessage(null);
   };
@@ -37,30 +38,36 @@ const RegisterPage: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsLoading(true);
   
     const { username, name, email, password, confirmPassword, agreeToTerms } = formData;
     if (!username || !name || !email || !password || !confirmPassword) {
       setErrorMessage("Please fill in all fields.");
+      setIsLoading(false);
       return;
     }
 
     if (!validateEmail(email)) {
       setErrorMessage("Please enter a valid email address.");
+      setIsLoading(false);
       return;
     }
 
     if (password.length < 8) {
       setErrorMessage("Password must be at least 8 characters long.");
+      setIsLoading(false);
       return;
     }
 
     if (password !== confirmPassword) {
       setErrorMessage("Passwords do not match!");
+      setIsLoading(false);
       return;
     }
 
     if (!agreeToTerms) {
         setErrorMessage("You must agree to the Terms and Conditions.");
+        setIsLoading(false);
         return;
     }
 
@@ -71,14 +78,10 @@ const RegisterPage: React.FC = () => {
         email: formData.email,
         password: formData.password,
       });
-      // console.log(response);
       
-      const token = response.data.access_token;  // Correct token extraction
-      // console.log(response.data.access_token);
-    
+      const token = response.data.access_token;
       sessionStorage.setItem("token", token);
     
-      // console.log("Registration successful:", response.data.msg);
       navigate("/LoginPage");
     } catch (error: any) {
       if (error.response && error.response.data && error.response.data.msg) {
@@ -87,6 +90,8 @@ const RegisterPage: React.FC = () => {
         setErrorMessage("Registration failed. Please try again.");
       }
       console.error("There was an error registering the user:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -169,6 +174,9 @@ const RegisterPage: React.FC = () => {
     borderRadius: "8px",
     cursor: "pointer",
     transition: "background-color 0.3s ease, transform 0.1s ease",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
   };
 
   const errorStyle: React.CSSProperties = {
@@ -301,8 +309,7 @@ const RegisterPage: React.FC = () => {
               />
             )}
           </div>
-            {/* Terms and Conditions Checkbox */}
-            <div style={checkboxStyle}>
+          <div style={checkboxStyle}>
             <input
               type="checkbox"
               id="agreeToTerms"
@@ -319,16 +326,24 @@ const RegisterPage: React.FC = () => {
             type="submit"
             style={buttonStyle}
             className="register-button"
+            disabled={isLoading}
             onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = "#0845c9";
-              e.currentTarget.style.transform = "translateY(-2px)";
+              if (!isLoading) {
+                e.currentTarget.style.backgroundColor = "#0845c9";
+                e.currentTarget.style.transform = "translateY(-2px)";
+              }
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = "#2563eb";
-              e.currentTarget.style.transform = "translateY(0)";
+              if (!isLoading) {
+                e.currentTarget.style.backgroundColor = "#2563eb";
+                e.currentTarget.style.transform = "translateY(0)";
+              }
             }}
           >
-            Register
+            {isLoading ? (
+              <Loader className="animate-spin mr-2" size={20} />
+            ) : null}
+            {isLoading ? "Registering..." : "Register"}
           </button>
         </form>
         <p style={{ textAlign: "center", marginTop: "20px" }}>

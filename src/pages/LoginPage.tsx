@@ -1,20 +1,21 @@
+"use client";
+
 import React, { useState } from "react";
-import axios from "axios";
-import qs from "qs";
 import { useNavigate } from "react-router-dom";
 import { User, Lock, Eye, EyeOff, Loader } from "lucide-react";
-import logo from '../assets/images/logo.png';
-import backgroundImage from '../assets/images/background.png';
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Link } from "react-router-dom";
+import axios from "axios";
+import qs from "qs";
 
-const LoginPage: React.FC = () => {
+export default function LoginPage() {
   const navigate = useNavigate();
-
   const [formData, setFormData] = useState({
     username: "",
     password: "",
-    grant_type: "password",
   });
-
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -31,31 +32,31 @@ const LoginPage: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
-  
+
     try {
       if (!formData.username || !formData.password) {
         setErrorMessage("Username and password are required.");
         setIsLoading(false);
         return;
       }
-  
+
       const response = await axios.post(
         `${import.meta.env.VITE_BACKEND_API}/token`,
         qs.stringify(formData),
         {
           headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
+            "Content-Type": "application/x-www-form-urlencoded",
           },
         }
       );
-  
+
       const token = response.data.access_token;
       sessionStorage.setItem("token", token);
-  
-      navigate("/ResumeJobUpload");
+
+      navigate("/app");
     } catch (error: any) {
       console.error("Error response:", error.response);
-  
+
       if (error.response && error.response.data && error.response.data.detail) {
         const errorMessages = error.response.data.detail.map((err: any) => {
           return `${err.loc[1]}: ${err.msg}`;
@@ -69,190 +70,106 @@ const LoginPage: React.FC = () => {
     }
   };
 
-  const pageStyle: React.CSSProperties = {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    minHeight: "100vh",
-    backgroundImage: `url(${backgroundImage})`,
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-    padding: "20px",
-  };
-
-  const formContainerStyle: React.CSSProperties = {
-    backgroundColor: "rgba(255, 255, 255, 0.9)",
-    borderRadius: "15px",
-    boxShadow: "0 10px 25px rgba(0, 0, 0, 0.1)",
-    padding: "40px",
-    width: "100%",
-    maxWidth: "400px",
-    backdropFilter: "blur(10px)",
-  };
-
-  const logoStyle: React.CSSProperties = {
-    display: "flex",
-    justifyContent: "center",
-    marginBottom: "20px",
-  };
-
-  const titleStyle: React.CSSProperties = {
-    fontSize: "28px",
-    fontWeight: "bold",
-    color: "#333",
-    marginBottom: "30px",
-    textAlign: "center",
-  };
-
-  const formStyle: React.CSSProperties = {
-    display: "flex",
-    flexDirection: "column",
-    gap: "20px",
-  };
-
-  const inputContainerStyle: React.CSSProperties = {
-    display: "flex",
-    flexDirection: "column",
-    position: "relative",
-  };
-
-  const labelStyle: React.CSSProperties = {
-    fontSize: "14px",
-    fontWeight: "bold",
-    color: "#555",
-    marginBottom: "5px",
-  };
-
-  const inputStyle: React.CSSProperties = {
-    padding: "12px 40px",
-    fontSize: "16px",
-    border: "1px solid #ddd",
-    borderRadius: "8px",
-    transition: "border-color 0.3s ease, box-shadow 0.3s ease",
-  };
-
-  const iconStyle: React.CSSProperties = {
-    position: "absolute",
-    left: "12px",
-    top: "38px",
-    color: "#888",
-  };
-
-  const buttonStyle: React.CSSProperties = {
-    padding: "14px",
-    fontSize: "18px",
-    fontWeight: "bold",
-    color: "#fff",
-    backgroundColor: "#2563eb",
-    border: "none",
-    borderRadius: "8px",
-    cursor: "pointer",
-    transition: "background-color 0.3s ease, transform 0.1s ease",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-  };
-
-  const errorStyle: React.CSSProperties = {
-    color: "#E53E3E",
-    fontSize: "14px",
-    marginTop: "10px",
-    textAlign: "center",
-  };
-
-  const linkStyle: React.CSSProperties = {
-    color: "#2563eb",
-    textDecoration: "none",
-    fontWeight: "bold",
-    transition: "color 0.3s ease",
-    cursor: 'pointer',
-  };
-
   return (
-    <div style={pageStyle} className="login-container">
-      <div style={formContainerStyle}>
-        <div style={logoStyle}>
-          <img src={logo} alt="Jobfit Ai Logo" width="100" height="100" />
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 p-4">
+      <div className="w-full max-w-md">
+        <div className="bg-white/10 backdrop-blur-lg rounded-3xl shadow-xl overflow-hidden">
+          <div className="p-8">
+            <div className="flex justify-center mb-4 text-3xl font-bold tracking-tighter">
+              Jobfit&nbsp;{" "}
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400">
+                AI
+              </span>
+            </div>
+            <h1 className="text-3xl font-bold text-center text-white mb-8">
+              Login
+            </h1>
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div>
+                <Label htmlFor="username" className="text-white">
+                  Username
+                </Label>
+                <div className="relative mt-1">
+                  <Input
+                    type="text"
+                    id="username"
+                    name="username"
+                    value={formData.username}
+                    onChange={handleChange}
+                    className="pl-10 bg-white/70 border-white/30 text-black placeholder-white/90"
+                    placeholder="Enter your username"
+                  />
+                  <User
+                    className="absolute left-3 top-1/2 transform -translate-y-1/2 text-black"
+                    size={18}
+                  />
+                </div>
+              </div>
+              <div>
+                <Label htmlFor="password" className="text-white">
+                  Password
+                </Label>
+                <div className="relative mt-1">
+                  <Input
+                    type={showPassword ? "text" : "password"}
+                    id="password"
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    className="pl-10 bg-white/70 border-white/30 text-black placeholder-white/90"
+                    placeholder="Enter your password"
+                  />
+                  <Lock
+                    className="absolute left-3 top-1/2 transform -translate-y-1/2 text-black"
+                    size={18}
+                  />
+                  {showPassword ? (
+                    <EyeOff
+                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-black cursor-pointer"
+                      size={18}
+                      onClick={() => setShowPassword(false)}
+                    />
+                  ) : (
+                    <Eye
+                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-black cursor-pointer"
+                      size={18}
+                      onClick={() => setShowPassword(true)}
+                    />
+                  )}
+                </div>
+              </div>
+              {errorMessage && (
+                <p className="text-red-400 text-sm text-center">
+                  {errorMessage}
+                </p>
+              )}
+              <Button
+                type="submit"
+                className="w-full bg-gradient-to-r from-blue-500 to-purple-400 hover:from-blue-600 hover:to-purple-600 text-white font-bold py-3 rounded-lg transition-all duration-300 transform hover:-translate-y-1"
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <>
+                    <Loader className="animate-spin mr-2" size={20} />
+                    Logging in...
+                  </>
+                ) : (
+                  "Login"
+                )}
+              </Button>
+            </form>
+            <p className="mt-6 text-center text-white">
+              Don't have an account?{" "}
+              <Link
+                to="/register"
+                className="text-blue-400 hover:text-blue-300 font-semibold"
+              >
+                Register
+              </Link>
+            </p>
+          </div>
         </div>
-        <h1 style={titleStyle}>Login</h1>
-        <form onSubmit={handleSubmit} style={formStyle}>
-          <div style={inputContainerStyle}>
-            <label htmlFor="username" style={labelStyle}>
-              Username
-            </label>
-            <input
-              type="text"
-              id="username"
-              name="username"
-              value={formData.username}
-              onChange={handleChange}
-              style={inputStyle}
-              className="login-input"
-            />
-            <User size={20} style={iconStyle} />
-          </div>
-          <div style={inputContainerStyle}>
-            <label htmlFor="password" style={labelStyle}>
-              Password
-            </label>
-            <input
-              type={showPassword ? "text" : "password"}
-              id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              style={inputStyle}
-              className="login-input"
-            />
-            <Lock size={20} style={iconStyle} />
-            {showPassword ? (
-              <EyeOff
-                size={20}
-                style={{ ...iconStyle, left: "auto", right: "12px", cursor: "pointer" }}
-                onClick={() => setShowPassword(false)}
-              />
-            ) : (
-              <Eye
-                size={20}
-                style={{ ...iconStyle, left: "auto", right: "12px", cursor: "pointer" }}
-                onClick={() => setShowPassword(true)}
-              />
-            )}
-          </div>
-          {errorMessage && <p style={errorStyle}>{errorMessage}</p>}
-          <button
-            type="submit"
-            style={buttonStyle}
-            className="login-button"
-            disabled={isLoading}
-            onMouseEnter={(e) => {
-              if (!isLoading) {
-                e.currentTarget.style.backgroundColor = "#0845c9";
-                e.currentTarget.style.transform = "translateY(-2px)";
-              }
-            }}
-            onMouseLeave={(e) => {
-              if (!isLoading) {
-                e.currentTarget.style.backgroundColor = "#2563eb";
-                e.currentTarget.style.transform = "translateY(0)";
-              }
-            }}
-          >
-            {isLoading ? (
-              <Loader className="animate-spin mr-2" size={20} />
-            ) : null}
-            {isLoading ? "Logging in..." : "Login"}
-          </button>
-        </form>
-        <p style={{ textAlign: "center", marginTop: "20px" }}>
-          Don't have an account?{" "}
-          <a onClick={() => {navigate("/RegisterPage")}} style={linkStyle} className="login-link">
-            Register
-          </a>
-        </p>
       </div>
     </div>
   );
-};
-
-export default LoginPage;
+}
